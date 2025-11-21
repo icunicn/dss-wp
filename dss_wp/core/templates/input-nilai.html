@@ -1,0 +1,35 @@
+<div class="container mt-4">
+  <h3>Input Nilai Evaluasi - {{ stakeholder.nama }}</h3>
+  <form method="POST">
+    {% csrf_token %}
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Alternatif</th>
+          {% for k in kriteria_list %}
+          <th>{{ k.nama }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in alternatif_list %}
+        <tr>
+          <td>{{ a.nama }}</td>
+          {% for k in kriteria_list %}
+          <td>
+            <input
+              type="number"
+              step="0.01"
+              name="nilai_{{ a.id }}_{{ k.id }}"
+              class="form-control"
+              required
+            />
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Simpan Nilai</button>
+  </form>
+</div>

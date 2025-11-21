@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard Stakeholder</title>
+  </head>
+  <body>
+    <h2>Selamat datang, {{ stakeholder.nama }}!</h2>
+    <p>Role Anda: {{ stakeholder.role }}</p>
+
+    <div style="margin-top: 20px">
+      <!-- Tombol menuju halaman input nilai -->
+      <a href="{% url 'input-nilai' stakeholder.id %}">
+        <button type="button">Input Nilai Evaluasi</button>
+      </a>
+    </div>
+
+    <div style="margin-top: 10px">
+      <!-- Tombol logout -->
+      <a href="{% url 'logout' %}">
+        <button type="button">Logout</button>
+      </a>
+    </div>
+  </body>
+</html>

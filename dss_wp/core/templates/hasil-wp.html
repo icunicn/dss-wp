@@ -1,0 +1,21 @@
+<h2>Hasil Weighted Product untuk {{ stake.nama }}</h2>
+
+<table border="1" cellpadding="8">
+  <thead>
+    <tr>
+      <th>Alternatif</th>
+      <th>Skor</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for h in hasil_wp %}
+    <tr>
+      <td>{{ h.alternatif.nama }}</td>
+      <td>{{ h.skor|floatformat:4 }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<br />
+<a href="{% url 'input-nilai' stake.id %}">← Kembali ke Input Nilai</a>

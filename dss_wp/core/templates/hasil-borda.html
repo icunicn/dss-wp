@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Perhitungan BORDA</title>
+  </head>
+  <body>
+    {% load dict_extras %}
+
+    <h1>Perhitungan BORDA</h1>
+
+    <!-- =======================================
+     1. SKOR WP PER STAKEHOLDER
+======================================= -->
+    <h2>1. Skor WP Setiap Stakeholder</h2>
+
+    {% for item in wp_per_stakeholder %}
+    <h3>Stakeholder: {{ item.stakeholder }}</h3>
+
+    <table border="1" cellpadding="6" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Alternatif</th>
+          <th>Skor WP</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in item.data %}
+        <tr>
+          <td>{{ row.alternatif.nama }}</td>
+          <td>{{ row.skor|floatformat:4 }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <br />
+    {% endfor %}
+
+    <!-- =======================================
+     2. TABEL BOBOT BORDA
+======================================= -->
+    <h2>2. Tabel Bobot Borda</h2>
+
+    <table border="1" cellpadding="6" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Ranking</th>
+          <th>Bobot Borda</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in bobot_borda_tabel %}
+        <tr>
+          <td>{{ row.rank }}</td>
+          <td>{{ row.bobot }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- =======================================
+     3. HASIL PERHITUNGAN BORDA
+======================================= -->
+    <h2>3. Hasil Perhitungan Borda</h2>
+
+    <table border="1" cellpadding="6" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Alternatif</th>
+
+          {% for r in bobot_borda_tabel %}
+          <th>Rank {{ r.rank }}</th>
+          {% endfor %}
+
+          <th>Poin Borda</th>
+          <th>Nilai Borda</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for key, row in borda_row_detail.items %}
+        <tr>
+          <td>{{ row.alternatif }}</td>
+
+          <!-- Nilai pada setiap ranking -->
+          {% for r in bobot_borda_tabel %}
+          <td>{{ row.rank_scores|get_item:r.rank|floatformat:4 }}</td>
+          {% endfor %}
+
+          <!-- Total poin -->
+          <td>{{ row.poin_borda|floatformat:4 }}</td>
+
+          <!-- Normalisasi: poin_borda / total -->
+          <td>{{ row.poin_borda|div:borda_total_sum|floatformat:4 }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+    <br/>
+    <button onclick="window.location.href='/'">
+      Kembali ke Halaman Login
+  </body>
+</html>
