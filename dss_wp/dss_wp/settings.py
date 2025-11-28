@@ -29,9 +29,12 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+TAILWIND_APP_NAME = 'theme'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'tailwind',
+    'theme',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -84,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'dss_db',  # Replace with your database name
             'USER': 'root',      # Replace with your MySQL username
-            'PASSWORD': '', # Replace with your MySQL password
+            'PASSWORD': 'admin', # Replace with your MySQL password
             'HOST': 'localhost',            # Or the IP address/hostname of your MySQL server
             'PORT': '3306',                 # Or the port your MySQL server is running on
             'OPTIONS': {
