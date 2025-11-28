@@ -1,25 +1,41 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
     <title>Dashboard Stakeholder</title>
   </head>
-  <body>
-    <h2>Selamat datang, {{ stakeholder.nama }}!</h2>
-    <p>Role Anda: {{ stakeholder.role }}</p>
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+      
+      <h2 class="text-3xl font-bold text-gray-800 mb-2">
+        👋 Selamat datang, <span class="text-indigo-600">{{ stakeholder.nama }}</span>!
+      </h2>
+      <p class="text-lg text-gray-600 mb-6 border-b pb-4">
+        Role Anda: <span class="font-semibold">{{ stakeholder.role }}</span>
+      </p>
 
-    <div style="margin-top: 20px">
-      <!-- Tombol menuju halaman input nilai -->
-      <a href="{% url 'input-nilai' stakeholder.id %}">
-        <button type="button">Input Nilai Evaluasi</button>
-      </a>
-    </div>
+      <div class="space-y-4">
+        
+        <a href="{% url 'input-nilai' stakeholder.id %}" class="block">
+          <button type="button" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-[1.01] shadow-md hover:shadow-lg">
+            📝 Input Nilai Evaluasi
+          </button>
+        </a>
 
-    <div style="margin-top: 10px">
-      <!-- Tombol logout -->
-      <a href="{% url 'logout' %}">
-        <button type="button">Logout</button>
-      </a>
+        <a href="{% url 'logout' %}" class="block">
+          <button type="button" class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-[1.01] shadow-md hover:shadow-lg">
+            🚪 Logout
+          </button>
+        </a>
+      </div>
+      
+      <p class="text-center text-sm text-gray-400 mt-6">
+          Sistem Informasi Evaluasi
+      </p>
+
     </div>
   </body>
 </html>
