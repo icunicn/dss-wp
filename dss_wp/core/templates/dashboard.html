@@ -1,25 +1,92 @@
+{% load static %}
+{% include 'partials/navbar.html' %}
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Dashboard Stakeholder</title>
-  </head>
-  <body>
-    <h2>Selamat datang, {{ stakeholder.nama }}!</h2>
-    <p>Role Anda: {{ stakeholder.role }}</p>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Dashboard Stakeholder</title>
+</head>
 
-    <div style="margin-top: 20px">
-      <!-- Tombol menuju halaman input nilai -->
-      <a href="{% url 'input-nilai' stakeholder.id %}">
-        <button type="button">Input Nilai Evaluasi</button>
-      </a>
+<body class=" min-h-screen">
+  <div class="absolute top-0 -z-10 h-full w-full bg-white"><div class="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[30%] translate-y-[20%] rounded-full bg-[rgba(173,109,244,0.5)] opacity-50 blur-[80px]"></div></div>
+
+  <div class="max-w-5xl mx-auto space-y-10 p-6">
+
+    <!-- STAT CARDS -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+
+      <!-- Borda Top -->
+      <div class="bg-white/80 backdrop-blur-xl p-6 rounded-3xl shadow">
+        <p class="text-sm text-gray-500 mb-1">Hasil Borda Tertinggi</p>
+        <p class="text-2xl font-semibold text-gray-900">{{ borda_top }}</p>
+        <p class="text-gray-600 text-sm mt-1">{{ borda_top_score }}</p>
+      </div>
+
+      <!-- Total -->
+      <div class="bg-white/80 backdrop-blur-xl p-6 rounded-3xl shadow">
+        <p class="text-sm text-gray-500 mb-1">Stakeholder Sudah Menilai</p>
+        <p class="text-2xl font-semibold text-gray-900">{{ total_stakeholder_nilai }}</p>
+      </div>
+
+      <!-- WP Avg -->
+      <div class="bg-white/80 backdrop-blur-xl p-6 rounded-3xl shadow">
+        <p class="text-sm text-gray-500 mb-1">Rata-Rata Skor WP</p>
+        <p class="text-2xl font-semibold text-gray-900">{{ avg_wp }}</p>
+      </div>
+
     </div>
 
-    <div style="margin-top: 10px">
-      <!-- Tombol logout -->
-      <a href="{% url 'logout' %}">
-        <button type="button">Logout</button>
-      </a>
+    <!-- CHART WP -->
+    <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Skor WP Setiap Alternatif</h3>
+      <canvas id="wpChart"></canvas>
     </div>
-  </body>
+
+    <!-- TABLE BORDA WEIGHTS -->
+    <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow">
+      <h3 class="text-lg font-semibold text-gray-800 mb-6">Tabel Bobot Borda</h3>
+      <table class="w-full text-left text-sm">
+        <thead class="text-gray-500">
+          <tr>
+            <th class="pb-2">Rank</th>
+            <th class="pb-2">Bobot</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in borda_weights %}
+          <tr class="border-t border-gray-200">
+            <td class="py-2">{{ row.rank }}</td>
+            <td class="py-2">{{ row.bobot }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- CHART SCRIPT -->
+  <script>
+    const wpData = {
+        labels: {{ wp_scores_json|safe }}.map(x => x.nama),
+        datasets: [{
+            label: "Skor WP",
+            data: {{ wp_scores_json|safe }}.map(x => x.nilai),
+            borderWidth: 1,
+            backgroundColor: "rgba(99, 102, 241, 0.3)",
+            borderColor: "rgba(99, 102, 241, 1)",
+            tension: 0.3
+        }]
+    };
+
+    new Chart(document.getElementById("wpChart"), {
+        type: "bar",
+        data: wpData,
+        options: { responsive: true }
+    });
+  </script>
+
+</body>
 </html>

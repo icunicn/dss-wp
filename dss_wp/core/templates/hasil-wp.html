@@ -1,21 +1,50 @@
-<h2>Hasil Weighted Product untuk {{ stake.nama }}</h2>
+{% load static %}
+{% include 'partials/navbar.html' %}
 
-<table border="1" cellpadding="8">
-  <thead>
-    <tr>
-      <th>Alternatif</th>
-      <th>Skor</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for h in hasil_wp %}
-    <tr>
-      <td>{{ h.alternatif.nama }}</td>
-      <td>{{ h.skor|floatformat:4 }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
+  <title>Document</title>
+</head>
+<body class="min-h-screen">
+    <div class="absolute top-0 -z-10 h-full w-full bg-white"><div class="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[30%] translate-y-[20%] rounded-full bg-[rgba(173,109,244,0.5)] opacity-50 blur-[80px]"></div></div>
 
-<br />
-<a href="{% url 'input-nilai' stake.id %}">← Kembali ke Input Nilai</a>
+  <div class="max-w-4xl mx-auto mt-8">
+
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+        Hasil Weighted Product untuk {{ stake.nama }}
+    </h2>
+
+    <div class="bg-white shadow-md rounded-xl overflow-hidden border border-gray-100">
+        <table class="w-full text-left">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-5 py-3 text-sm font-semibold text-gray-600">Alternatif</th>
+                    <th class="px-5 py-3 text-sm font-semibold text-gray-600">Skor</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-100">
+                {% for h in hasil_wp %}
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-5 py-3 text-gray-800 font-medium">
+                        {{ h.alternatif.nama }}
+                    </td>
+                    <td class="px-5 py-3 text-gray-700">
+                        {{ h.skor|floatformat:4 }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    
+
+</div>
+  
+</body>
+</html>
