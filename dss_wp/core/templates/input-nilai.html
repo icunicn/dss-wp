@@ -1,35 +1,64 @@
-<div class="container mt-4">
-  <h3>Input Nilai Evaluasi - {{ stakeholder.nama }}</h3>
-  <form method="POST">
-    {% csrf_token %}
-    <table class="table table-bordered table-striped">
-      <thead class="table-dark">
-        <tr>
-          <th>Alternatif</th>
-          {% for k in kriteria_list %}
-          <th>{{ k.nama }}</th>
-          {% endfor %}
-        </tr>
-      </thead>
-      <tbody>
+{% load static %}
+{% include 'partials/navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
+  <title>Document</title>
+</head>
+<body class="min-h-screen">
+  <div class="absolute top-0 -z-10 h-full w-full bg-white"><div class="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[30%] translate-y-[20%] rounded-full bg-[rgba(173,109,244,0.5)] opacity-50 blur-[80px]"></div></div>
+  <div class="max-w-5xl mx-auto mt-10 p-6">
+
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">
+        Input Nilai Evaluasi — {{ stakeholder.nama }}
+    </h2>
+
+    <form method="POST" class="space-y-8">
+        {% csrf_token %}
+
         {% for a in alternatif_list %}
-        <tr>
-          <td>{{ a.nama }}</td>
-          {% for k in kriteria_list %}
-          <td>
-            <input
-              type="number"
-              step="0.01"
-              name="nilai_{{ a.id }}_{{ k.id }}"
-              class="form-control"
-              required
-            />
-          </td>
-          {% endfor %}
-        </tr>
+        <div class="bg-white shadow-sm border border-gray-200 rounded-xl p-6">
+
+            <h3 class="text-lg font-semibold text-gray-700 mb-5">
+                {{ a.nama }}
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+                {% for k in kriteria_list %}
+                <div class="flex flex-col">
+                    <label class="font-medium text-gray-700 mb-1">
+                        {{ k.nama }}
+                    </label>
+
+                    <input 
+                        type="number"
+                        step="0.01"
+                        name="nilai_{{ a.id }}_{{ k.id }}"
+                        class="px-4 py-2 rounded-lg border border-gray-300 
+                               focus:ring-2 focus:ring-indigo-400 
+                               focus:border-indigo-500 transition shadow-sm"
+                        required
+                    />
+                </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
         {% endfor %}
-      </tbody>
-    </table>
-    <button type="submit" class="btn btn-primary">Simpan Nilai</button>
-  </form>
+
+        <button type="submit"
+            class="mt-4 w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl
+                   hover:bg-indigo-700 transition shadow-md">
+            Simpan Nilai
+        </button>
+
+    </form>
 </div>
+
+</body>
+</html>

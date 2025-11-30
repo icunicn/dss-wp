@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from core.models import stakeholder, alternatif, kriteria, NilaiEvaluasi
 from core.utils import hitung_wp, hitung_borda
+import json
 
 # Create your views here.
 def login_view(request):
@@ -22,7 +23,55 @@ def login_view(request):
 @login_required
 def dashboard_view(request):
     stakeholder_profile = getattr(request.user, 'stakeholder_profile', None)
-    return render(request, 'dashboard.html', {'stakeholder': stakeholder_profile})
+    if stakeholder_profile is None:
+        return render(request, "error.html", {"msg": "Stakeholder tidak ditemukan"})
+
+    # --- Hitung WP untuk stakeholder yang login ---
+    hasil_wp = hitung_wp(stakeholder_profile)  # return daftar sorted
+
+    # Konversi hasil WP buat chart
+    wp_scores = [
+        {"nama": h.alternatif.nama, "nilai": float(h.skor)}
+        for h in hasil_wp
+    ]
+
+    # --- Hitung Borda global (semua stakeholder) ---
+    borda_result = hitung_borda()
+
+    # Ambil Borda Final Output
+    borda_final = borda_result["final_output"]
+
+    # Ranking tertinggi
+    borda_top = borda_final[0]["alternatif"].nama if borda_final else "-"
+    borda_top_score = borda_final[0]["skor"] if borda_final else 0
+
+    # Tabel Bobot Borda
+    bobot_borda_tabel = borda_result["bobot_borda_tabel"]
+
+    total_stakeholder_nilai = len(borda_result["stakeholder_list"])
+    avg_wp = sum([x["nilai"] for x in wp_scores]) / len(wp_scores) if wp_scores else 0
+
+    total_alternatif = alternatif.objects.count()
+
+    context = {
+        "stakeholder": stakeholder_profile,
+        "total_alternatif": total_alternatif,
+
+        # WP untuk chart
+        "wp_scores": wp_scores,
+        "avg_wp": round(avg_wp, 4),
+
+        # Borda
+        "borda_top": borda_top,
+        "borda_top_score": round(borda_top_score, 4),
+        "borda_weights": bobot_borda_tabel,
+
+        # Statistik
+        "total_stakeholder_nilai": total_stakeholder_nilai,
+        "wp_scores_json": json.dumps(wp_scores),
+    }
+
+    return render(request, "dashboard.html", context)
 
 def logout_view(request):
     logout(request)
@@ -74,7 +123,7 @@ def hasil_wp_view(request, stakeholder_id):
         return redirect('input-nilai', stakeholder_id=stake.id)
 
     context = {
-        'stake': stake,
+        'stakeholder': stake,
         'hasil_wp': hasil_wp
     }
     return render(request, 'hasil-wp.html', context)

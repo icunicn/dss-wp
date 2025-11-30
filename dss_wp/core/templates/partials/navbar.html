@@ -1,0 +1,56 @@
+<nav class="w-full bg-white/70 backdrop-blur-md border-b border-gray-200/60">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
+        <!-- Left -->
+        <div class="flex items-center gap-8">
+            <span class="text-lg font-semibold text-gray-800">
+                Hi, {{ stakeholder.nama }}
+            </span>
+
+            <ul class="flex items-center gap-6 text-gray-600">
+
+                <li>
+                    {% if request.resolver_match.url_name == "hasil-wp" or request.resolver_match.url_name == "input-nilai"  %}
+                    <a href="{% url 'dashboard' %}"
+                    class="hover:text-indigo-600 transition font-medium">
+                        Dashboard
+                    </a>
+                    {% endif %}
+                </li>
+
+                <li>
+                    <a href="{% url 'input-nilai' stakeholder.id %}" 
+                       class="hover:text-indigo-600 transition font-medium">
+                       Input Nilai WP
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'hasil-borda' %}" 
+                       class="hover:text-indigo-600 transition font-medium">
+                       Hasil Bobot Borda
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'hasil-wp' stakeholder.id %}" 
+                       class="hover:text-indigo-600 transition font-medium">
+                       Hasil WP
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Right side -->
+        <div class="flex items-center gap-4">
+
+            <a href="{% url 'logout' %}"
+               class="px-4 py-2 rounded-lg text-red-600 font-semibold 
+                      border border-red-200 hover:bg-red-50 
+                      transition-all duration-200">
+                Logout
+            </a>
+        </div>
+
+    </div>
+</nav>

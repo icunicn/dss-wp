@@ -1,104 +1,138 @@
+{% load static %}
+{% load dict_extras %}
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
     <title>Perhitungan BORDA</title>
-  </head>
-  <body>
-    {% load dict_extras %}
+</head>
 
-    <h1>Perhitungan BORDA</h1>
+<body class="min-h-screen">
+  <div class="absolute top-0 -z-10 h-full w-full bg-white"><div class="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[30%] translate-y-[20%] rounded-full bg-[rgba(173,109,244,0.5)] opacity-50 blur-[80px]"></div></div>
 
-    <!-- =======================================
-     1. SKOR WP PER STAKEHOLDER
-======================================= -->
-    <h2>1. Skor WP Setiap Stakeholder</h2>
+    <!-- NAV -->
+    <nav class="w-full bg-white/70 backdrop-blur-md border-b border-gray-200/60">
+        <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
 
-    {% for item in wp_per_stakeholder %}
-    <h3>Stakeholder: {{ item.stakeholder }}</h3>
+            <h1 class="text-xl font-semibold text-gray-800">
+                Perhitungan Borda
+            </h1>
+        </div>
+    </nav>
 
-    <table border="1" cellpadding="6" cellspacing="0">
-      <thead>
-        <tr>
-          <th>Alternatif</th>
-          <th>Skor WP</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in item.data %}
-        <tr>
-          <td>{{ row.alternatif.nama }}</td>
-          <td>{{ row.skor|floatformat:4 }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <br />
-    {% endfor %}
+    <div class="max-w-6xl mx-auto px-6 py-10">
 
-    <!-- =======================================
-     2. TABEL BOBOT BORDA
-======================================= -->
-    <h2>2. Tabel Bobot Borda</h2>
+        <!-- SECTION: WP per Stakeholder -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">1. Skor WP Setiap Stakeholder</h2>
 
-    <table border="1" cellpadding="6" cellspacing="0">
-      <thead>
-        <tr>
-          <th>Ranking</th>
-          <th>Bobot Borda</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in bobot_borda_tabel %}
-        <tr>
-          <td>{{ row.rank }}</td>
-          <td>{{ row.bobot }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+            {% for item in wp_per_stakeholder %}
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border border-gray-200">
 
-    <!-- =======================================
-     3. HASIL PERHITUNGAN BORDA
-======================================= -->
-    <h2>3. Hasil Perhitungan Borda</h2>
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">
+                    Stakeholder: <span class="text-indigo-600">{{ item.stakeholder }}</span>
+                </h3>
 
-    <table border="1" cellpadding="6" cellspacing="0">
-      <thead>
-        <tr>
-          <th>Alternatif</th>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-700">
+                                <th class="py-3 px-4 text-left font-semibold border-b">Alternatif</th>
+                                <th class="py-3 px-4 text-left font-semibold border-b">Skor WP</th>
+                            </tr>
+                        </thead>
 
-          {% for r in bobot_borda_tabel %}
-          <th>Rank {{ r.rank }}</th>
-          {% endfor %}
+                        <tbody class="text-gray-700">
+                            {% for row in item.data %}
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="py-2 px-4 border-b">{{ row.alternatif.nama }}</td>
+                                <td class="py-2 px-4 border-b">{{ row.skor|floatformat:4 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
-          <th>Poin Borda</th>
-          <th>Nilai Borda</th>
-        </tr>
-      </thead>
+            </div>
+            {% endfor %}
+        </section>
 
-      <tbody>
-        {% for key, row in borda_row_detail.items %}
-        <tr>
-          <td>{{ row.alternatif }}</td>
+        <!-- SECTION: Bobot Borda -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">2. Tabel Bobot Borda</h2>
 
-          <!-- Nilai pada setiap ranking -->
-          {% for r in bobot_borda_tabel %}
-          <td>{{ row.rank_scores|get_item:r.rank|floatformat:4 }}</td>
-          {% endfor %}
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-700">
+                                <th class="py-3 px-4 text-left border-b font-semibold">Ranking</th>
+                                <th class="py-3 px-4 text-left border-b font-semibold">Bobot Borda</th>
+                            </tr>
+                        </thead>
 
-          <!-- Total poin -->
-          <td>{{ row.poin_borda|floatformat:4 }}</td>
+                        <tbody>
+                            {% for row in bobot_borda_tabel %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-2 px-4 border-b">{{ row.rank }}</td>
+                                <td class="py-2 px-4 border-b">{{ row.bobot }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
 
-          <!-- Normalisasi: poin_borda / total -->
-          <td>{{ row.poin_borda|div:borda_total_sum|floatformat:4 }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+                    </table>
+                </div>
+            </div>
+        </section>
 
+        <!-- SECTION: Hasil Borda -->
+        <section>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">3. Hasil Perhitungan Borda</h2>
 
-    <br/>
-    <button onclick="window.location.href='/'">
-      Kembali ke Halaman Login
-  </body>
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-700">
+                                <th class="py-3 px-4 text-left border-b font-semibold">Alternatif</th>
+
+                                {% for r in bobot_borda_tabel %}
+                                <th class="py-3 px-4 text-left border-b font-semibold">
+                                    Rank {{ r.rank }}
+                                </th>
+                                {% endfor %}
+
+                                <th class="py-3 px-4 text-left border-b font-semibold">Poin</th>
+                                <th class="py-3 px-4 text-left border-b font-semibold">Nilai Borda</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for key, row in borda_row_detail.items %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-2 px-4 border-b">{{ row.alternatif }}</td>
+
+                                {% for r in bobot_borda_tabel %}
+                                <td class="py-2 px-4 border-b">
+                                    {{ row.rank_scores|get_item:r.rank|floatformat:4 }}
+                                </td>
+                                {% endfor %}
+
+                                <td class="py-2 px-4 border-b">{{ row.poin_borda|floatformat:4 }}</td>
+
+                                <td class="py-2 px-4 border-b">
+                                    {{ row.poin_borda|div:borda_total_sum|floatformat:4 }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</body>
 </html>
